@@ -15,17 +15,27 @@
 
       * { box-sizing: border-box; }
       body { margin: 0; min-height: 100vh; }
-      main { width: min(1080px, calc(100% - 40px)); margin: 48px auto; }
-      header { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 22px; }
+      main { width: min(1280px, calc(100% - 40px)); margin: 48px auto; }
+      header { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
       .eyebrow { margin: 0 0 10px; color: #a07b35; font-size: .75rem; font-weight: 750; letter-spacing: .16em; }
       h1 { margin: 0; color: #174a70; font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -.045em; }
       .subtitle { margin: 8px 0 0; color: #526a78; }
-      a { display: inline-block; flex: none; border-radius: 999px; padding: 12px 18px; color: #fff; background: #174a70; font-weight: 650; text-decoration: none; }
+      .demos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+      .demo { min-width: 0; padding: 18px; border: 1px solid #d7e0e5; border-radius: 20px; background: #f9fbfc; box-shadow: 0 20px 60px #122b3a12; }
+      .demo.dark { color: #e2eaf0; border-color: #314657; background: #0d1924; }
+      .demo header { align-items: center; margin-bottom: 14px; }
+      h2 { margin: 0; font-size: 1.2rem; }
+      a { display: inline-block; flex: none; border-radius: 999px; padding: 10px 14px; color: #fff; background: #174a70; font-size: .9rem; font-weight: 650; text-decoration: none; }
       a:hover { background: #123a59; }
-      iframe { display: block; width: 100%; height: min(74vh, 780px); min-height: 420px; border: 1px solid #d7e0e5; border-radius: 18px; background: #fff; box-shadow: 0 20px 60px #122b3a18; }
+      .dark a { color: #0d1924; background: #d7b96f; }
+      .dark a:hover { background: #e2c985; }
+      iframe { display: block; width: 100%; height: min(68vh, 720px); min-height: 380px; border: 1px solid #d7e0e5; border-radius: 12px; background: #fff; }
+      .dark iframe { border-color: #314657; }
       @media (max-width: 620px) {
-        main { width: min(100% - 24px, 1080px); margin: 24px auto; }
+        main { width: min(100% - 24px, 1280px); margin: 24px auto; }
         header { align-items: start; flex-direction: column; }
+        .demos { grid-template-columns: 1fr; }
+        .demo header { align-items: start; }
         iframe { height: 68vh; min-height: 320px; }
       }
     </style>
@@ -38,9 +48,23 @@
           <h1>A living mosaic</h1>
           <p class="subtitle">Biodiversity across Brazil</p>
         </div>
-        <a href="arara.pdf" download>Download the PDF</a>
       </header>
-      <iframe src="arara.pdf" title="A living mosaic: biodiversity across Brazil"></iframe>
+      <section class="demos" aria-label="Light and dark theme demos">
+        <article class="demo">
+          <header>
+            <h2>Light</h2>
+            <a href="arara.pdf" download>Download PDF</a>
+          </header>
+          <iframe src="arara.pdf" title="Light theme demo: biodiversity across Brazil"></iframe>
+        </article>
+        <article class="demo dark">
+          <header>
+            <h2>Dark</h2>
+            <a href="arara-dark.pdf" download>Download PDF</a>
+          </header>
+          <iframe src="arara-dark.pdf" title="Dark theme demo: biodiversity across Brazil"></iframe>
+        </article>
+      </section>
     </main>
   </body>
 </html>

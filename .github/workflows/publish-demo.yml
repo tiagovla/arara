@@ -47,26 +47,38 @@ jobs:
           trap 'rm -rf "$tmpdir"' EXIT
           cp demo/demo.tex src/beamerthemearara.sty "$tmpdir/"
           tectonic --outdir "$tmpdir" "$tmpdir/demo.tex"
+          sed 's/progressbar=frametitle,sectionpage=none/dark,progressbar=frametitle,sectionpage=none/' demo/demo.tex > "$tmpdir/demo-dark.tex"
+          tectonic --outdir "$tmpdir" "$tmpdir/demo-dark.tex"
           mkdir -p _site
           cp "$tmpdir/demo.pdf" _site/arara.pdf
+          cp "$tmpdir/demo-dark.pdf" _site/arara-dark.pdf
           cp .github/pages/index.html _site/index.html
-          pages="$(pdfinfo "$tmpdir/demo.pdf" | awk '/^Pages:/ { print $2 }')"
-          if [ "$pages" -lt 4 ]; then
-            echo "The demo needs at least four slides to make a preview" >&2
-            exit 1
-          fi
-          middle_one=$(((pages + 1) / 2))
-          middle_two=$((middle_one + 1))
-          if [ "$middle_two" -ge "$pages" ]; then
-            middle_two=$((pages - 1))
-          fi
-          pdftoppm -f 1 -l 1 -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/first"
-          pdftoppm -f "$middle_one" -l "$middle_one" -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/middle-one"
-          pdftoppm -f "$middle_two" -l "$middle_two" -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/middle-two"
-          pdftoppm -f "$pages" -l "$pages" -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/last"
-          montage "$tmpdir/first.png" "$tmpdir/middle-one.png" "$tmpdir/middle-two.png" "$tmpdir/last.png" \
-            -tile 2x2 -geometry 960x540+16+16 -background '#eef2f5' -gravity center \
-            _site/demo-preview.png
+          for theme in light dark; do
+            pdf="$tmpdir/demo.pdf"
+            [ "$theme" = light ] || pdf="$tmpdir/demo-dark.pdf"
+            pages="$(pdfinfo "$pdf" | awk '/^Pages:/ { print $2 }')"
+            if [ "$pages" -lt 4 ]; then
+              echo "The $theme demo needs at least four slides to make a preview" >&2
+              exit 1
+            fi
+            middle_one=$(((pages + 1) / 2))
+            middle_two=$((middle_one + 1))
+            if [ "$middle_two" -ge "$pages" ]; then
+              middle_two=$((pages - 1))
+            fi
+            for point in first middle-one middle-two last; do
+              case "$point" in
+                first) page=1 ;;
+                middle-one) page=$middle_one ;;
+                middle-two) page=$middle_two ;;
+                last) page=$pages ;;
+              esac
+              pdftoppm -f "$page" -l "$page" -singlefile -png -scale-to 960 "$pdf" "$tmpdir/$theme-$point"
+            done
+            montage "$tmpdir/$theme-first.png" "$tmpdir/$theme-middle-one.png" "$tmpdir/$theme-middle-two.png" "$tmpdir/$theme-last.png" \
+              -tile 2x2 -geometry 960x540+16+16 -background '#eef2f5' -gravity center \
+              "_site/demo-preview-$theme.png"
+          done
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
