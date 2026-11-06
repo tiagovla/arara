@@ -36,6 +36,11 @@ jobs:
         with:
           tectonic-version: 0.17.0
 
+      - name: Install PDF preview tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes imagemagick poppler-utils
+
       - name: Build and prepare site
         run: |
           tmpdir="$(mktemp -d "$RUNNER_TEMP/arara.XXXXXX")"
@@ -45,6 +50,23 @@ jobs:
           mkdir -p _site
           cp "$tmpdir/demo.pdf" _site/arara.pdf
           cp .github/pages/index.html _site/index.html
+          pages="$(pdfinfo "$tmpdir/demo.pdf" | awk '/^Pages:/ { print $2 }')"
+          if [ "$pages" -lt 4 ]; then
+            echo "The demo needs at least four slides to make a preview" >&2
+            exit 1
+          fi
+          middle_one=$(((pages + 1) / 2))
+          middle_two=$((middle_one + 1))
+          if [ "$middle_two" -ge "$pages" ]; then
+            middle_two=$((pages - 1))
+          fi
+          pdftoppm -f 1 -l 1 -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/first"
+          pdftoppm -f "$middle_one" -l "$middle_one" -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/middle-one"
+          pdftoppm -f "$middle_two" -l "$middle_two" -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/middle-two"
+          pdftoppm -f "$pages" -l "$pages" -singlefile -png -scale-to 960 "$tmpdir/demo.pdf" "$tmpdir/last"
+          montage "$tmpdir/first.png" "$tmpdir/middle-one.png" "$tmpdir/middle-two.png" "$tmpdir/last.png" \
+            -tile 2x2 -geometry 960x540+16+16 -background '#eef2f5' -gravity center \
+            _site/demo-preview.png
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
