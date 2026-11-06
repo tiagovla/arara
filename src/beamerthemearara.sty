@@ -1,0 +1,88 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemearara}[2026/11/06 Arara Beamer theme]
+
+\RequirePackage{tikz}
+\mode<presentation>
+
+\definecolor{araraPrimary}{HTML}{174A70}
+\definecolor{araraInk}{HTML}{122B3A}
+\definecolor{araraGold}{HTML}{D6B875}
+\definecolor{araraBlue}{HTML}{4D8297}
+\definecolor{araraPaper}{HTML}{F6F7F8}
+\definecolor{araraMist}{HTML}{DCE5EA}
+
+\setbeamercolor{normal text}{fg=araraInk,bg=araraPaper}
+\setbeamercolor{structure}{fg=araraPrimary}
+\setbeamercolor{alerted text}{fg=araraPrimary}
+\setbeamercolor{example text}{fg=araraBlue}
+\setbeamercolor{frametitle}{fg=araraPaper,bg=araraPrimary}
+\setbeamercolor{framesubtitle}{fg=araraPaper!78,bg=araraPrimary}
+\setbeamercolor{progress bar}{fg=araraGold,bg=araraMist}
+\setbeamercolor{block title}{fg=araraInk,bg=araraGold!45}
+\setbeamercolor{block body}{fg=araraInk,bg=araraGold!12}
+\setbeamercolor{block title alerted}{fg=araraPaper,bg=araraPrimary}
+\setbeamercolor{block body alerted}{fg=araraInk,bg=araraPrimary!8}
+\setbeamercolor{block title example}{fg=araraPaper,bg=araraBlue}
+\setbeamercolor{block body example}{fg=araraInk,bg=araraBlue!8}
+\setbeamerfont{title}{size=\huge,series=\bfseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small}
+\setbeamerfont{subtitle}{size=\large}
+\setbeamertemplate{navigation symbols}{}
+
+\def\arara@progressbar{frametitle}
+\def\arara@none{none}
+\def\arara@frametitle{frametitle}
+\def\arara@foot{foot}
+\def\arara@sectionpage{simple}
+\DeclareOptionBeamer{progressbar}[frametitle]{\def\arara@progressbar{#1}}
+\DeclareOptionBeamer{sectionpage}[simple]{\def\arara@sectionpage{#1}}
+\ProcessOptionsBeamer
+
+\newcommand{\arara@drawprogressbar}{%
+  \pgfmathsetmacro{\arara@ratio}{min(1,\insertframenumber/max(1,\inserttotalframenumber))}%
+  \pgfmathsetlengthmacro{\arara@progresswidth}{\paperwidth*\arara@ratio}%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=1.2pt,dp=0pt]{progress bar}%
+    \hbox to \paperwidth{%
+      \color{araraGold}\rule{\arara@progresswidth}{1.2pt}%
+      \color{araraMist}\rule{\dimexpr\paperwidth-\arara@progresswidth\relax}{1.2pt}%
+    }%
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{frametitle}{%
+  \begin{beamercolorbox}[wd=\paperwidth,sep=.8em,leftskip=1em]{frametitle}
+    \usebeamerfont{frametitle}\insertframetitle\par
+    {\usebeamerfont{framesubtitle}\insertframesubtitle\par}
+  \end{beamercolorbox}
+  \ifx\arara@progressbar\arara@frametitle
+    \arara@drawprogressbar
+  \fi
+}
+
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox to \paperwidth{\hfill\usebeamerfont{page number in head/foot}\color{araraInk!55}\insertframenumber\hspace{1em}}%
+  \ifx\arara@progressbar\arara@foot\arara@drawprogressbar\fi
+}
+
+\def\arara@simple{simple}
+\ifx\arara@sectionpage\arara@simple
+  \AtBeginSection[]{%
+    \begin{frame}[plain]
+      \begin{tikzpicture}[remember picture,overlay]
+        \fill[araraPrimary] (current page.south west) rectangle (current page.north east);
+        \fill[araraGold] ([xshift=-1.5cm,yshift=0.8cm]current page.east) --
+          ([xshift=-3cm,yshift=0.2cm]current page.east) --
+          ([xshift=-1.5cm,yshift=-0.4cm]current page.east) -- cycle;
+        \fill[araraBlue] ([xshift=-2.2cm,yshift=0.2cm]current page.east) circle (0.14cm);
+      \end{tikzpicture}
+      \vfill
+      {\color{araraGold}\small\bfseries FIELD NOTES  /  0\thesection}\par
+      \vspace{0.5cm}
+      {\usebeamerfont{title}\color{araraPaper}\insertsectionhead}\par
+      \vfill
+    \end{frame}
+  }
+\fi
+
+\mode<all>
