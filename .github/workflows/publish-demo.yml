@@ -6,6 +6,7 @@ on:
     paths:
       - demo/**
       - src/**
+      - justfile
       - .github/pages/**
       - .github/workflows/publish-demo.yml
   workflow_dispatch:
@@ -36,6 +37,9 @@ jobs:
         with:
           tectonic-version: 0.17.0
 
+      - name: Set up Just
+        uses: extractions/setup-just@v3
+
       - name: Install PDF preview tools
         run: |
           sudo apt-get update
@@ -45,17 +49,13 @@ jobs:
         run: |
           tmpdir="$(mktemp -d "$RUNNER_TEMP/arara.XXXXXX")"
           trap 'rm -rf "$tmpdir"' EXIT
-          cp demo/demo.tex src/beamerthemearara.sty "$tmpdir/"
-          tectonic --outdir "$tmpdir" "$tmpdir/demo.tex"
-          sed 's/progressbar=frametitle,sectionpage=none/dark,progressbar=frametitle,sectionpage=none/' demo/demo.tex > "$tmpdir/demo-dark.tex"
-          tectonic --outdir "$tmpdir" "$tmpdir/demo-dark.tex"
+          just demo demo-dark
           mkdir -p _site
-          cp "$tmpdir/demo.pdf" _site/arara.pdf
-          cp "$tmpdir/demo-dark.pdf" _site/arara-dark.pdf
+          cp arara.pdf arara-dark.pdf _site/
           cp .github/pages/index.html _site/index.html
           for theme in light dark; do
-            pdf="$tmpdir/demo.pdf"
-            [ "$theme" = light ] || pdf="$tmpdir/demo-dark.pdf"
+            pdf=_site/arara.pdf
+            [ "$theme" = light ] || pdf=_site/arara-dark.pdf
             pages="$(pdfinfo "$pdf" | awk '/^Pages:/ { print $2 }')"
             if [ "$pages" -lt 4 ]; then
               echo "The $theme demo needs at least four slides to make a preview" >&2
