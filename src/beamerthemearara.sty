@@ -4,40 +4,65 @@
 \RequirePackage{tikz}
 \mode<presentation>
 
+\newif\ifarara@dark
+\def\arara@progressbar{frametitle}
+\def\arara@none{none}
+\def\arara@frametitle{frametitle}
+\def\arara@foot{foot}
+\def\arara@sectionpage{simple}
+\DeclareOptionBeamer{dark}{\arara@darktrue}
+\DeclareOptionBeamer{progressbar}[frametitle]{\def\arara@progressbar{#1}}
+\DeclareOptionBeamer{sectionpage}[simple]{\def\arara@sectionpage{#1}}
+\ProcessOptionsBeamer
+
+\ifarara@dark
+\definecolor{araraPrimary}{HTML}{183B56}
+\definecolor{araraInk}{HTML}{E2EAF0}
+\definecolor{araraGold}{HTML}{D7B96F}
+\definecolor{araraBlue}{HTML}{79B6C5}
+\definecolor{araraPaper}{HTML}{E2EAF0}
+\definecolor{araraCanvas}{HTML}{0D1924}
+\definecolor{araraMist}{HTML}{314657}
+\definecolor{araraPanel}{HTML}{162735}
+\definecolor{araraPanelSoft}{HTML}{13222F}
+\setbeamercolor{normal text}{fg=araraInk,bg=araraCanvas}
+\setbeamercolor{structure}{fg=araraBlue}
+\setbeamercolor{alerted text}{fg=araraGold}
+\setbeamercolor{example text}{fg=araraBlue}
+\setbeamercolor{block title}{fg=araraInk,bg=araraPrimary!75}
+\setbeamercolor{block body}{fg=araraInk,bg=araraPanel}
+\setbeamercolor{block title alerted}{fg=araraPaper,bg=araraPrimary}
+\setbeamercolor{block body alerted}{fg=araraInk,bg=araraPanelSoft}
+\setbeamercolor{block title example}{fg=araraPaper,bg=araraBlue!65!araraPrimary}
+\setbeamercolor{block body example}{fg=araraInk,bg=araraPanel}
+\else
 \definecolor{araraPrimary}{HTML}{174A70}
 \definecolor{araraInk}{HTML}{122B3A}
 \definecolor{araraGold}{HTML}{D6B875}
 \definecolor{araraBlue}{HTML}{4D8297}
 \definecolor{araraPaper}{HTML}{F6F7F8}
+\definecolor{araraCanvas}{HTML}{F6F7F8}
 \definecolor{araraMist}{HTML}{DCE5EA}
-
-\setbeamercolor{normal text}{fg=araraInk,bg=araraPaper}
+\setbeamercolor{normal text}{fg=araraInk,bg=araraCanvas}
 \setbeamercolor{structure}{fg=araraPrimary}
 \setbeamercolor{alerted text}{fg=araraPrimary}
 \setbeamercolor{example text}{fg=araraBlue}
-\setbeamercolor{frametitle}{fg=araraPaper,bg=araraPrimary}
-\setbeamercolor{framesubtitle}{fg=araraPaper!78,bg=araraPrimary}
-\setbeamercolor{progress bar}{fg=araraGold,bg=araraMist}
 \setbeamercolor{block title}{fg=araraInk,bg=araraGold!45}
 \setbeamercolor{block body}{fg=araraInk,bg=araraGold!12}
 \setbeamercolor{block title alerted}{fg=araraPaper,bg=araraPrimary}
 \setbeamercolor{block body alerted}{fg=araraInk,bg=araraPrimary!8}
 \setbeamercolor{block title example}{fg=araraPaper,bg=araraBlue}
 \setbeamercolor{block body example}{fg=araraInk,bg=araraBlue!8}
+\fi
+
+\setbeamercolor{frametitle}{fg=araraPaper,bg=araraPrimary}
+\setbeamercolor{framesubtitle}{fg=araraPaper!78,bg=araraPrimary}
+\setbeamercolor{progress bar}{fg=araraGold,bg=araraMist}
 \setbeamerfont{title}{size=\huge,series=\bfseries}
 \setbeamerfont{frametitle}{size=\large,series=\bfseries}
 \setbeamerfont{framesubtitle}{size=\small}
 \setbeamerfont{subtitle}{size=\large}
 \setbeamertemplate{navigation symbols}{}
-
-\def\arara@progressbar{frametitle}
-\def\arara@none{none}
-\def\arara@frametitle{frametitle}
-\def\arara@foot{foot}
-\def\arara@sectionpage{simple}
-\DeclareOptionBeamer{progressbar}[frametitle]{\def\arara@progressbar{#1}}
-\DeclareOptionBeamer{sectionpage}[simple]{\def\arara@sectionpage{#1}}
-\ProcessOptionsBeamer
 
 \newcommand{\arara@drawprogressbar}{%
   \pgfmathsetmacro{\arara@ratio}{min(1,\insertframenumber/max(1,\inserttotalframenumber))}%

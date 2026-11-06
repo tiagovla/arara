@@ -23,7 +23,7 @@
     ([xshift=-0.3cm,yshift=0.5cm]current page.east) -- cycle;
     \fill[araraBlue] ([xshift=-2.2cm,yshift=1.2cm]current page.east)
     circle (0.45cm);
-    \fill[araraInk] ([xshift=-2.2cm,yshift=1.2cm]current page.east)
+    \fill[araraCanvas] ([xshift=-2.2cm,yshift=1.2cm]current page.east)
     circle (0.2cm);
     \draw[araraPaper!40,line width=0.7pt]
     ([xshift=-5.4cm,yshift=-1.6cm]current page.east) .. controls
@@ -247,7 +247,7 @@
 
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
-    \fill[araraInk] (current page.south west) rectangle (current
+    \fill[araraPrimary] (current page.south west) rectangle (current
     page.north east);
     \fill[araraGold] ([xshift=-1.8cm,yshift=1cm]current page.east) --
     ([xshift=-3cm,yshift=0.45cm]current page.east) --
