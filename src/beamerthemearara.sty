@@ -131,9 +131,11 @@
 }
 
 \setbeamertemplate{footline}{%
-  \leavevmode\hbox to \paperwidth{\hfill\usebeamerfont{page number in
-  head/foot}\color{araraInk!55}\insertframenumber\hspace{1em}}%
-  \ifx\arara@progressbar\arara@foot\arara@drawprogressbar\fi
+  \vbox{%
+    \hbox to \paperwidth{\hfill\usebeamerfont{page number in
+    head/foot}\color{araraInk!55}\insertframenumber\hspace{1em}}%
+    \ifx\arara@progressbar\arara@foot\arara@drawprogressbar\fi
+  }%
 }
 
 \setbeamertemplate{section page}{%
