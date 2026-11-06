@@ -64,6 +64,51 @@
 \setbeamerfont{subtitle}{size=\large}
 \setbeamertemplate{navigation symbols}{}
 
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[araraPrimary] (current page.south west) rectangle
+    (current page.north east);
+    \fill[araraGold] ([xshift=-2.2cm,yshift=1.5cm]current page.east) --
+    ([xshift=-4.8cm,yshift=0.5cm]current page.east) --
+    ([xshift=-2.4cm,yshift=-0.4cm]current page.east) --
+    ([xshift=-0.3cm,yshift=0.5cm]current page.east) -- cycle;
+    \fill[araraBlue] ([xshift=-2.2cm,yshift=1.2cm]current page.east)
+    circle (0.45cm);
+    \fill[araraCanvas] ([xshift=-2.2cm,yshift=1.2cm]current page.east)
+    circle (0.2cm);
+    \draw[araraPaper!40,line width=0.7pt]
+    ([xshift=-5.4cm,yshift=-1.6cm]current page.east) .. controls
+    ([xshift=-3.7cm,yshift=-0.7cm]current page.east) and
+    ([xshift=-2.8cm,yshift=-2.2cm]current page.east) ..
+    ([xshift=-0.5cm,yshift=-1.1cm]current page.east);
+    \fill[araraGold] ([xshift=-1.1cm,yshift=-2.2cm]current page.east)
+    circle (0.08cm);
+    \fill[araraPaper] ([xshift=-4.2cm,yshift=2.1cm]current page.east)
+    circle (0.06cm);
+  \end{tikzpicture}
+  \vspace{0.6cm}
+  \begin{minipage}{0.6\textwidth}
+    \ifx\insertauthor\@empty\else
+    {\usebeamerfont{author}\color{araraGold}\insertauthor\par}
+    \vspace{0.5cm}
+    \fi
+    {\usebeamerfont{title}\color{araraPaper}\inserttitle\par}
+    \ifx\insertsubtitle\@empty\else
+    \vspace{0.35cm}
+    {\usebeamerfont{subtitle}\color{araraPaper!80}\insertsubtitle\par}
+    \fi
+  \end{minipage}
+  \vfill
+  \begin{minipage}{0.6\textwidth}
+    {\usebeamerfont{institute}\color{araraPaper!65}\insertinstitute\par}
+    \ifx\insertdate\@empty\else
+    \vspace{0.2cm}
+    {\usebeamerfont{date}\color{araraPaper!65}\insertdate\par}
+    \fi
+  \end{minipage}
+  \vspace{0.7cm}
+}
+
 \newcommand{\arara@drawprogressbar}{%
   \pgfmathsetmacro{\arara@ratio}{min(1,\insertframenumber/max(1,\inserttotalframenumber))}%
   \pgfmathsetlengthmacro{\arara@progresswidth}{\paperwidth*\arara@ratio}%
@@ -91,24 +136,30 @@
   \ifx\arara@progressbar\arara@foot\arara@drawprogressbar\fi
 }
 
+\setbeamertemplate{section page}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[araraPrimary] (current page.south west) rectangle
+    (current page.north east);
+    \fill[araraGold] ([xshift=-1.5cm,yshift=0.8cm]current page.east) --
+    ([xshift=-3cm,yshift=0.2cm]current page.east) --
+    ([xshift=-1.5cm,yshift=-0.4cm]current page.east) -- cycle;
+    \fill[araraBlue] ([xshift=-2.2cm,yshift=0.2cm]current
+    page.east) circle (0.14cm);
+  \end{tikzpicture}
+  \vfill
+  {\color{araraGold}\small\bfseries\insertsectionnumber}\par
+  \vspace{0.5cm}
+  \begin{minipage}{0.7\textwidth}
+    {\usebeamerfont{title}\color{araraPaper}\insertsectionhead\par}
+  \end{minipage}
+  \vfill
+}
+
 \def\arara@simple{simple}
 \ifx\arara@sectionpage\arara@simple
 \AtBeginSection[]{%
   \begin{frame}[plain]
-    \begin{tikzpicture}[remember picture,overlay]
-      \fill[araraPrimary] (current page.south west) rectangle
-      (current page.north east);
-      \fill[araraGold] ([xshift=-1.5cm,yshift=0.8cm]current page.east) --
-      ([xshift=-3cm,yshift=0.2cm]current page.east) --
-      ([xshift=-1.5cm,yshift=-0.4cm]current page.east) -- cycle;
-      \fill[araraBlue] ([xshift=-2.2cm,yshift=0.2cm]current
-      page.east) circle (0.14cm);
-    \end{tikzpicture}
-    \vfill
-    {\color{araraGold}\small\bfseries FIELD NOTES  /  0\thesection}\par
-    \vspace{0.5cm}
-    {\usebeamerfont{title}\color{araraPaper}\insertsectionhead}\par
-    \vfill
+    \sectionpage
   \end{frame}
 }
 \fi
