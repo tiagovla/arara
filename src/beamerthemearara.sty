@@ -56,33 +56,36 @@
     {\usebeamerfont{framesubtitle}\insertframesubtitle\par}
   \end{beamercolorbox}
   \ifx\arara@progressbar\arara@frametitle
-    \arara@drawprogressbar
+  \arara@drawprogressbar
   \fi
 }
 
 \setbeamertemplate{footline}{%
-  \leavevmode\hbox to \paperwidth{\hfill\usebeamerfont{page number in head/foot}\color{araraInk!55}\insertframenumber\hspace{1em}}%
+  \leavevmode\hbox to \paperwidth{\hfill\usebeamerfont{page number in
+  head/foot}\color{araraInk!55}\insertframenumber\hspace{1em}}%
   \ifx\arara@progressbar\arara@foot\arara@drawprogressbar\fi
 }
 
 \def\arara@simple{simple}
 \ifx\arara@sectionpage\arara@simple
-  \AtBeginSection[]{%
-    \begin{frame}[plain]
-      \begin{tikzpicture}[remember picture,overlay]
-        \fill[araraPrimary] (current page.south west) rectangle (current page.north east);
-        \fill[araraGold] ([xshift=-1.5cm,yshift=0.8cm]current page.east) --
-          ([xshift=-3cm,yshift=0.2cm]current page.east) --
-          ([xshift=-1.5cm,yshift=-0.4cm]current page.east) -- cycle;
-        \fill[araraBlue] ([xshift=-2.2cm,yshift=0.2cm]current page.east) circle (0.14cm);
-      \end{tikzpicture}
-      \vfill
-      {\color{araraGold}\small\bfseries FIELD NOTES  /  0\thesection}\par
-      \vspace{0.5cm}
-      {\usebeamerfont{title}\color{araraPaper}\insertsectionhead}\par
-      \vfill
-    \end{frame}
-  }
+\AtBeginSection[]{%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[araraPrimary] (current page.south west) rectangle
+      (current page.north east);
+      \fill[araraGold] ([xshift=-1.5cm,yshift=0.8cm]current page.east) --
+      ([xshift=-3cm,yshift=0.2cm]current page.east) --
+      ([xshift=-1.5cm,yshift=-0.4cm]current page.east) -- cycle;
+      \fill[araraBlue] ([xshift=-2.2cm,yshift=0.2cm]current
+      page.east) circle (0.14cm);
+    \end{tikzpicture}
+    \vfill
+    {\color{araraGold}\small\bfseries FIELD NOTES  /  0\thesection}\par
+    \vspace{0.5cm}
+    {\usebeamerfont{title}\color{araraPaper}\insertsectionhead}\par
+    \vfill
+  \end{frame}
+}
 \fi
 
 \mode<all>
